@@ -1,31 +1,47 @@
+import Head from 'next/head'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
+import InfoCards from '@/components/InfoCards'
 
 export default function Home() {
   return (
-    <motion.main
-      className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-blue-900 text-white p-8"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      <h1 className="text-4xl font-bold mb-4">TwaryAPI</h1>
-      <p className="mb-6 text-lg">API publik gratis untuk quote, gombalan, papkitsu, dan joke receh.</p>
-      <div className="space-x-4">
-        <Link href="/docs" className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg font-semibold">
-          Dokumentasi
-        </Link>
-        <Link href="/tester" className="bg-white text-black hover:bg-gray-200 px-4 py-2 rounded-lg font-semibold">
-          Coba API
-        </Link>
-      </div>
-      <div className="mt-10">
-        <h2 className="text-2xl font-semibold mb-2">Hubungi Saya</h2>
-        <div className="space-x-4">
-          <a href="https://github.com/yourusername" target="_blank" className="underline text-blue-400">GitHub</a>
-          <a href="https://discord.com/users/yourdiscordid" target="_blank" className="underline text-blue-400">Discord</a>
+    <>
+      <Head>
+        <title>TwaryAPI - REST API</title>
+        <meta name="description" content="API Publik gratis yang selalu online" />
+      </Head>
+
+      <main className="min-h-screen bg-black text-white px-6 py-10">
+        <motion.h1
+          className="text-4xl md:text-6xl font-bold text-center mb-8 text-blue-400"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Selamat Datang di TwaryAPI
+        </motion.h1>
+
+        <motion.p
+          className="text-center max-w-2xl mx-auto text-gray-300 text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          API publik gratis untuk berbagai kebutuhan aplikasi Anda. Cepat, handal, dan mudah digunakan.
+        </motion.p>
+
+        <div className="flex justify-center mt-8">
+          <motion.a
+            href="/docs"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg"
+          >
+            Lihat Dokumentasi
+          </motion.a>
         </div>
-      </div>
-    </motion.main>
+
+        <InfoCards />
+      </main>
+    </>
   )
 }

@@ -1,27 +1,72 @@
+import Head from 'next/head'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { FiSend } from 'react-icons/fi'
 
 export default function Tester() {
-  const [result, setResult] = useState('')
-  const testEndpoint = async (endpoint) => {
-    const res = await fetch(endpoint)
-    const data = await res.json()
-    setResult(JSON.stringify(data, null, 2))
+  const [url, setUrl] = useState('')
+  const [response, setResponse] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleTest = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(url)
+      const data = await res.json()
+      setResponse(JSON.stringify(data, null, 2))
+    } catch (error) {
+      setResponse('Gagal mengambil data. Pastikan URL valid.')
+    }
+    setLoading(false)
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-3xl font-bold mb-4">Tester API</h1>
-      <div className="space-y-2 mb-6">
-        {['quoteid', 'gombal', 'papkitsu', 'jokereceh', 'jokereceh/all'].map((e) => (
-          <button key={e}
-            onClick={() => testEndpoint('/api/' + e)}
-            className="bg-blue-700 hover:bg-blue-500 px-4 py-2 rounded mr-2"
-          >
-            Test /api/{e}
-          </button>
-        ))}
-      </div>
-      <pre className="bg-gray-900 p-4 rounded text-green-300 overflow-x-auto">{result}</pre>
-    </main>
+    <>
+      <Head>
+        <title>Tester API - TwaryAPI</title>
+      </Head>
+
+      <main className="min-h-screen bg-black text-white px-6 py-12">
+        <motion.h1
+          className="text-3xl md:text-5xl font-bold text-center text-blue-400 mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          Coba Endpoint API
+        </motion.h1>
+
+        <div className="max-w-2xl mx-auto">
+          <div className="flex gap-2 mb-6">
+            <input
+              type="text"
+              placeholder="Masukkan URL API..."
+              className="flex-1 bg-gray-800 text-white p-3 rounded-xl border border-gray-700 outline-none"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+            <motion.button
+              onClick={handleTest}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl shadow-lg font-semibold transition-all"
+            >
+              {loading ? 'Memuat...' : <>
+                <FiSend /> Coba
+              </>}
+            </motion.button>
+          </div>
+
+          {response && (
+            <motion.pre
+              className="bg-gray-900 p-4 rounded-xl text-sm overflow-auto border border-gray-700 text-green-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {response}
+            </motion.pre>
+          )}
+        </div>
+      </main>
+    </>
   )
 }
