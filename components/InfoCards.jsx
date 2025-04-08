@@ -50,7 +50,7 @@ export default function InfoCards() {
       {/* GitHub & Discord buttons */}
       <div className="flex justify-center gap-4">
         <a
-          href="https://github.com/your-repo"
+          href="https://github.com/calvgrant"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl shadow transition"
@@ -58,7 +58,7 @@ export default function InfoCards() {
           <FaGithub /> GitHub
         </a>
         <a
-          href="https://discord.gg/your-server"
+          href="https://discordapp.com/users/715783278237450280"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl shadow transition"
