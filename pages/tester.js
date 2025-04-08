@@ -9,6 +9,11 @@ export default function Tester() {
   const [loading, setLoading] = useState(false)
 
   const handleTest = async () => {
+    if (!url.startsWith('https://testwary.vercel.app/api/')) {
+      setResponse('Hanya URL TwaryAPI yang diizinkan.')
+      return
+    }
+
     setLoading(true)
     try {
       const res = await fetch(url)
