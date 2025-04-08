@@ -1,40 +1,34 @@
-'use client'
-
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { FaServer } from 'react-icons/fa'
 
 const cards = [
   {
     title: 'Online Forever',
-    description: 'TwaryAPI selalu aktif 24/7 dan tersedia untuk umum.',
+    description: 'API ini selalu online, gratis, dan dapat digunakan kapan saja.',
+    icon: <FaServer />,
   },
   {
-    title: 'Cepat dan Handal',
-    description: 'Respons API cepat dan cocok untuk kebutuhan pengembangan Anda.',
+    title: 'Simple & Cepat',
+    description: 'Didesain untuk kemudahan dan kecepatan penggunaan.',
+    icon: <FaServer />,
   },
 ]
 
 export default function InfoCards() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
   return (
-    <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 shadow-xl hover:shadow-blue-600/40 transition duration-300">
       {cards.map((card, index) => (
         <motion.div
           key={index}
-          className={`rounded-2xl p-6 border border-blue-500 transition-all duration-300 bg-gradient-to-br from-blue-900 to-blue-700 ${
-            hoveredIndex === index
-              ? 'shadow-[0_0_25px_5px_rgba(59,130,246,0.7)]'
-              : 'shadow-md'
-          }`}
-          onMouseEnter={() => setHoveredIndex(index)}
-          onMouseLeave={() => setHoveredIndex(null)}
+          className="bg-gray-900 rounded-xl p-6 border border-gray-700 shadow-md"
           whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <h3 className="text-2xl font-semibold text-white mb-2">
-            {card.title}
-          </h3>
-          <p className="text-gray-300">{card.description}</p>
+          <div className="flex items-center gap-3 text-blue-400 text-xl mb-2">
+            {card.icon}
+            <h3 className="font-bold">{card.title}</h3>
+          </div>
+          <p className="text-gray-300 text-sm">{card.description}</p>
         </motion.div>
       ))}
     </div>
