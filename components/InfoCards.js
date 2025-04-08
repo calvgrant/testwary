@@ -16,7 +16,7 @@ const cards = [
 
 export default function InfoCards() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 shadow-xl hover:shadow-blue-600/40 transition duration-300">
       {cards.map((card, index) => (
         <motion.div
           key={index}
