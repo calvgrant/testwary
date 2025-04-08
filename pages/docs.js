@@ -5,19 +5,24 @@ import { FiLink } from 'react-icons/fi'
 const endpoints = [
   {
     method: 'GET',
-    path: '/api/joke',
-    description: 'Mengembalikan lelucon acak dalam format JSON.',
+    path: '/api/papkitsu',
+    description: 'Fotonya Kitsune Pakai Json',
   },
   {
     method: 'GET',
-    path: '/api/quote',
+    path: '/api/quoteid',
     description: 'Mengembalikan kutipan motivasi atau inspiratif.',
   },
   {
     method: 'POST',
-    path: '/api/echo',
-    description: 'Mengembalikan kembali data yang Anda kirimkan (testing).',
+    path: '/api/gombal',
+    description: 'Kata Kata Gombal Anjay.',
   },
+  {
+    method: 'POST',
+    path: '/api/jokereceh',
+    description: 'Joke recehan coy.',
+  }
 ]
 
 export default function Docs() {

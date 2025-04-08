@@ -1,29 +1,33 @@
-import Head from 'next/head'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { FiSend } from 'react-icons/fi'
+import Head from "next/head";
+import { useState } from "react";
+import { motion } from "framer-motion";
+
+const endpoints = [
+  { label: "GET /papkitsu", path: "/api/papkitsu" },
+  { label: "GET /quoteid", path: "/api/quoteid" },
+  { label: "GET /gombal", path: "/api/gombal" },
+  { label: "GET /jokereceh", path: "/api/jokereceh" },
+];
 
 export default function Tester() {
-  const [url, setUrl] = useState('')
-  const [response, setResponse] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState(null);
 
-  const handleTest = async () => {
-    if (!url.startsWith('https://testwary.vercel.app/api/')) {
-      setResponse('Hanya URL TwaryAPI yang diizinkan.')
-      return
-    }
-
-    setLoading(true)
+  const handleTest = async (path, index) => {
+    const url = `https://testwary.vercel.app${path}`;
+    setActive(index);
+    setLoading(true);
+    setResponse(null);
     try {
-      const res = await fetch(url)
-      const data = await res.json()
-      setResponse(JSON.stringify(data, null, 2))
-    } catch (error) {
-      setResponse('Gagal mengambil data. Pastikan URL valid.')
+      const res = await fetch(url);
+      const data = await res.json();
+      setResponse(JSON.stringify(data, null, 2));
+    } catch (err) {
+      setResponse("Gagal mengambil data. Pastikan endpoint valid.");
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <>
@@ -33,45 +37,37 @@ export default function Tester() {
 
       <main className="min-h-screen bg-black text-white px-6 py-12">
         <motion.h1
-          className="text-3xl md:text-5xl font-bold text-center text-blue-400 mb-8"
+          className="text-3xl md:text-5xl font-bold text-center mb-10"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          Coba Endpoint API
+          Tes Endpoint API
         </motion.h1>
 
-        <div className="max-w-2xl mx-auto">
-          <div className="flex gap-2 mb-6">
-            <input
-              type="text"
-              placeholder="Masukkan URL API..."
-              className="flex-1 bg-gray-800 text-white p-3 rounded-xl border border-gray-700 outline-none"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-            <motion.button
-              onClick={handleTest}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-xl shadow-lg font-semibold transition-all"
+        {/* Endpoint Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {endpoints.map((ep, i) => (
+            <button
+              key={i}
+              onClick={() => handleTest(ep.path, i)}
+              className={`px-4 py-2 rounded-xl transition font-medium shadow-lg ${
+                active === i
+                  ? "bg-blue-600 ring-2 ring-blue-400"
+                  : "bg-gray-800 hover:bg-gray-700"
+              }`}
             >
-              {loading ? 'Memuat...' : <>
-                <FiSend /> Coba
-              </>}
-            </motion.button>
-          </div>
+              {ep.label}
+            </button>
+          ))}
+        </div>
 
-          {response && (
-            <motion.pre
-              className="bg-gray-900 p-4 rounded-xl text-sm overflow-auto border border-gray-700 text-green-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              {response}
-            </motion.pre>
-          )}
+        {/* Response Viewer */}
+        <div className="bg-gray-900 rounded-xl p-4 whitespace-pre-wrap text-sm font-mono overflow-auto max-w-4xl mx-auto">
+          {loading
+            ? "Memuat..."
+            : response || "Klik salah satu tombol di atas untuk mencoba API."}
         </div>
       </main>
     </>
-  )
+  );
 }
