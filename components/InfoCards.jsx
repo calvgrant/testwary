@@ -1,6 +1,7 @@
-
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiClock, FiGithub, FiZap } from "react-icons/fi";
+import { FaDiscord, FaGithub } from "react-icons/fa";
 
 const infoCards = [
   {
@@ -21,20 +22,50 @@ const infoCards = [
 ];
 
 export default function InfoCards() {
+  const [activeCard, setActiveCard] = useState(null);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-12">
-      {infoCards.map((card, i) => (
-        <motion.div
-          key={i}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-gray-900 rounded-2xl p-6 border border-gray-700 shadow-lg text-white"
+    <div className="flex flex-col gap-8 my-12">
+      {/* Info cards grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {infoCards.map((card, i) => (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setActiveCard(i)}
+            className={`cursor-pointer bg-gray-900 rounded-2xl p-6 border transition-all duration-300 shadow-lg text-white ${
+              activeCard === i
+                ? "ring-4 ring-blue-500/50 border-blue-500"
+                : "border-gray-700"
+            }`}
+          >
+            <div className="text-blue-400 mb-2">{card.icon}</div>
+            <h3 className="text-xl font-semibold mb-1">{card.title}</h3>
+            <p className="text-sm text-gray-300">{card.description}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* GitHub & Discord buttons */}
+      <div className="flex justify-center gap-4">
+        <a
+          href="https://github.com/your-repo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl shadow transition"
         >
-          <div className="text-blue-400 mb-2">{card.icon}</div>
-          <h3 className="text-xl font-semibold mb-1">{card.title}</h3>
-          <p className="text-sm text-gray-300">{card.description}</p>
-        </motion.div>
-      ))}
+          <FaGithub /> GitHub
+        </a>
+        <a
+          href="https://discord.gg/your-server"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl shadow transition"
+        >
+          <FaDiscord /> Discord
+        </a>
+      </div>
     </div>
   );
 }
