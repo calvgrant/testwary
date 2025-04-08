@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { motion } from 'framer-motion'
-import InfoCards from '@/components/InfoCards'
+import InfoCards from '@/components/InfoCards.jsx'
 
 export default function Home() {
   return (
