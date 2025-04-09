@@ -21,7 +21,6 @@ Contoh endpoint:
 | `/api/gombal`        | Gombalan random (support `?count=n`)       |
 | `/api/papkitsu`      | Papkitsu image random (support `?count=n`) |
 | `/api/jokereceh`     | Joke receh random (support `?count=n`)     |
-| `/api/jokereceh/all` | Semua joke receh tersedia                  |
 
 ## Pages
 - `/` : Homepage TwaryAPI
@@ -41,8 +40,10 @@ Project ini sudah support **serverless** dan siap langsung deploy ke [Vercel](ht
 
 ## Kontak
 Hubungi saya di:
-- [GitHub](https://github.com/yourusername)
-- [Discord](https://discord.com/users/yourdiscordid)
+- [GitHub](https://github.com/calvgrant)
+- [Discord](https://discord.com/users/715783278237450280)
 
 ---
 Built with Next.js, Tailwind, and lots of love!
+
+© KalrexZ 2025
