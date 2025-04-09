@@ -1,32 +1,34 @@
-// pages/api/uptime.js
+ // pages/api/uptime.js
 
 export default async function handler(req, res) {
   const targetUrl = process.env.TARGET_API_URL2;
   const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
+  const forceDown = req.query.forceDown === 'true';
+
+  if (forceDown) {
+    await sendDiscordAlert('API is DOWN! (Simulated with ?forceDown=true)');
+    return res.status(503).json({ message: 'Simulated down', online: false });
+  }
+
   try {
     const response = await fetch(targetUrl);
     const text = await response.text();
 
-    console.log("Status:", response.status);
-    console.log("Body:", text.slice(0, 200)); // Debug untuk tahu isi respons
-
     const isError =
       response.status >= 400 ||
       text.toLowerCase().includes("not found") ||
-      text.toLowerCase().includes("error") ||
-      text.toLowerCase().includes("vercel") || // untuk 404 vercel
-      text.length < 20; // respons terlalu pendek bisa dicurigai
+      text.toLowerCase().includes("vercel 404") ||
+      text.length < 10;
 
     if (isError) {
-      await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 80)}...`);
+      await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 100)}...`);
     }
 
     res.status(200).json({
       message: "Uptime checked",
       status: response.status,
       online: !isError,
-      debug: text.slice(0, 80),
     });
   } catch (error) {
     await sendDiscordAlert(`API is UNREACHABLE! Error: ${error.message}`);
