@@ -1,4 +1,7 @@
+ ![twaryapi]()
+
 # TwaryAPI (Next.js Edition)
+ ![NextJS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white) ![JavaScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
 TwaryAPI adalah REST API yang menyediakan berbagai data menarik seperti quote random, gombalan, gambar papkitsu, dan jokes receh. Sekarang hadir dengan tampilan keren menggunakan **Next.js**, **TailwindCSS**, dan animasi dari **Framer Motion**.
 
