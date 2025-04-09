@@ -1,6 +1,8 @@
 import imgs from "@/data/papkitsu.json"; // adjust path as needed
 
 export default function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  
   const count = parseInt(req.query.count) || 1;
 
   const result = Array(count)
