@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/monitor",
+      "schedule": "*/5 * * * *",
+      "enabled": true
+    }
   ]
 }

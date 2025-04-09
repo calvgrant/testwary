@@ -1,14 +1,31 @@
-// app/api/monitor/route.js
 import { NextResponse } from 'next/server'
+import fs from 'fs'
+import path from 'path'
 
-const DISCORD_WEBHOOK_URL = process.env.DCWEB
+const DISCORD_WEBHOOK_URL = process.env.WEBDC
 const STATUS_URL = `${process.env.TWARY}/api/status`
+
+const monitorFilePath = path.resolve('./monitor.json')
+const webhookBaseUrl = DISCORD_WEBHOOK_URL?.split('/messages')[0]
 
 function msToTime(ms) {
   const seconds = Math.floor((ms / 1000) % 60)
   const minutes = Math.floor((ms / (1000 * 60)) % 60)
   const hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
   return `${hours}h ${minutes}m ${seconds}s`
+}
+
+function saveMessageId(id) {
+  fs.writeFileSync(monitorFilePath, JSON.stringify({ messageId: id }, null, 2))
+}
+
+function loadMessageId() {
+  try {
+    const data = fs.readFileSync(monitorFilePath, 'utf-8')
+    return JSON.parse(data).messageId
+  } catch {
+    return null
+  }
 }
 
 async function sendDiscordEmbed(status, meta = {}) {
@@ -53,11 +70,28 @@ async function sendDiscordEmbed(status, meta = {}) {
     embed.description = `Tidak bisa menjangkau API:\n\`\`\`${meta.error}\`\`\``
   }
 
-  await fetch(DISCORD_WEBHOOK_URL, {
+  const messageId = loadMessageId()
+
+  if (messageId) {
+    const editUrl = `${webhookBaseUrl}/messages/${messageId}`
+    const editRes = await fetch(editUrl, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ embeds: [embed] }),
+    })
+
+    if (editRes.ok) return
+  }
+
+  // If edit fails or messageId doesn't exist, send new message
+  const res = await fetch(DISCORD_WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ embeds: [embed] }),
   })
+
+  const json = await res.json()
+  if (json.id) saveMessageId(json.id)
 }
 
 export async function GET() {
