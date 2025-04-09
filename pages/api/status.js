@@ -1,21 +1,12 @@
 // pages/api/status.js
-export default function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Content-Type", "application/json");
 
-  const response = {
-    status: 200,
-    end_point: "/api/status",
-    method: "GET",
-    data: {
-      status: "ok",
-      version: "1.0.0",
-      uptime: process.uptime(), // waktu hidup server (detik)
-      timestamp: new Date().toISOString(),
-      env: process.env.NODE_ENV || "development",
-    },
-  };
+export default async function handler(req, res) {
+  const targetUrl = process.env.TARGET_API_URL;
 
-  const prettyJson = JSON.stringify(response, null, 2);
-  res.status(200).end(prettyJson);
+  try {
+    const response = await fetch(targetUrl);
+    res.status(200).json({ online: response.ok, status: response.status });
+  } catch {
+    res.status(200).json({ online: false, status: "unreachable" });
+  }
 }
