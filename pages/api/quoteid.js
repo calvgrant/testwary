@@ -1,6 +1,8 @@
-import quotes from "@/data/quoteid.json"; // sesuaikan path jika perlu
+ import quotes from "@/data/quoteid.json"; // adjust path as needed
 
-export default function handler(req, res) {
+ export default function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // <- tambahkan ini
+
   const count = parseInt(req.query.count) || 1;
 
   const result = Array(count)
