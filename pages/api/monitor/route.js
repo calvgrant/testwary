@@ -1,24 +1,17 @@
-// app/api/monitor/route.ts
+// app/api/monitor/route.js
 import { NextResponse } from 'next/server'
 
-const DISCORD_WEBHOOK_URL = process.env.DCWEB!
+const DISCORD_WEBHOOK_URL = process.env.DCWEB
 const STATUS_URL = `${process.env.TWARY}/api/status`
 
-function msToTime(ms: number) {
+function msToTime(ms) {
   const seconds = Math.floor((ms / 1000) % 60)
   const minutes = Math.floor((ms / (1000 * 60)) % 60)
   const hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
   return `${hours}h ${minutes}m ${seconds}s`
 }
 
-async function sendDiscordEmbed(
-  status: 'ok' | 'down' | 'unreachable' | 'slow',
-  meta: {
-    latency?: number
-    data?: any
-    error?: string
-  } = {}
-) {
+async function sendDiscordEmbed(status, meta = {}) {
   const emojis = {
     ok: '✅',
     down: '❌',
@@ -39,7 +32,7 @@ async function sendDiscordEmbed(
     fields: [],
     timestamp: new Date().toISOString(),
     footer: { text: 'TwaryAPI Monitor' },
-  } as any
+  }
 
   if (status === 'ok') {
     embed.fields.push(
@@ -71,7 +64,7 @@ export async function GET() {
   const start = Date.now()
 
   try {
-    const res = await fetch(STATUS_URL, { timeout: 5000 })
+    const res = await fetch(STATUS_URL)
     const latency = Date.now() - start
     const data = await res.json()
 
@@ -84,7 +77,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ success: true })
-  } catch (e: any) {
+  } catch (e) {
     await sendDiscordEmbed('unreachable', { error: e.message || e.toString() })
     return NextResponse.json({ error: 'API unreachable' }, { status: 500 })
   }
