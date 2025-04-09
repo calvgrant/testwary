@@ -1,19 +1,30 @@
- import quotes from "@/data/quoteid.json"; // adjust path as needed
+import quotes from "@/data/quoteid.json"; // adjust path as needed
 
- export default function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // <- tambahkan ini
+export default function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Content-Type", "application/json");
 
   const count = parseInt(req.query.count) || 1;
 
-  const result = Array(count)
-    .fill(0)
-    .map(() => {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      return {
-        author: randomQuote.author,
-        quotes: randomQuote.quotes,
-      };
-    });
+  const getRandomQuote = () => {
+    const random = quotes[Math.floor(Math.random() * quotes.length)];
+    return {
+      author: random.author,
+      quotes: random.quotes,
+    };
+  };
 
-  res.status(200).json(count > 1 ? result : result[0]);
+  const data = count > 1
+    ? Array(count).fill(0).map(getRandomQuote)
+    : getRandomQuote();
+
+  const response = {
+    status: 200,
+    end_point: "/fun/quoteid",
+    method: "GET",
+    data,
+  };
+
+  const prettyJson = JSON.stringify(response, null, 2);
+  res.status(200).end(prettyJson);
 }
