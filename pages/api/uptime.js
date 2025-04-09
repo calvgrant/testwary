@@ -4,22 +4,15 @@ export default async function handler(req, res) {
   const targetUrl = process.env.TARGET_API_URL2;
   const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
-  const forceDown = req.query.forceDown === 'true';
-
-  if (forceDown) {
-    await sendDiscordAlert('API is DOWN! (Simulated with ?forceDown=true)');
-    return res.status(503).json({ message: 'Simulated down', online: false });
-  }
-
   try {
     const response = await fetch(targetUrl);
     const text = await response.text();
 
     const isError =
+      !response.ok ||
       response.status >= 400 ||
       text.toLowerCase().includes("not found") ||
-      text.toLowerCase().includes("vercel 404") ||
-      text.length < 10;
+      text.toLowerCase().includes("error");
 
     if (isError) {
       await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 100)}...`);
