@@ -19,7 +19,7 @@ export default function UptimePage() {
   const checkStatus = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('/api/check', { endpoints });
+      const res = await axios.post('https://testwary.vercel.app/api/check', { endpoints });
       setResults(res.data.statuses);
     } catch (err) {
       console.error('Error checking status:', err);
