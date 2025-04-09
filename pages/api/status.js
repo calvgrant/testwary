@@ -3,7 +3,7 @@
 const endpoints = [
   { name: "Gombal", path: "/api/gombal" },
   { name: "QuoteID", path: "/api/quoteid" },
-  { name: "Jokereceh", path: "/api/jokesreceh" },
+  { name: "Jokereceh", path: "/api/jokereceh" },
   { name: "Pap Kitsune", path: "/api/papkitsu" },
   // tambah lagi di sini sesuai kebutuhan
 ];
