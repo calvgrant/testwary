@@ -1,7 +1,7 @@
 // pages/api/uptime.js
 
 export default async function handler(req, res) {
-  const targetUrl = process.env.TARGET_API_URL;
+  const targetUrl = process.env.TARGET_API_URL2;
   const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
   try {
