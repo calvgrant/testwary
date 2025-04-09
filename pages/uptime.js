@@ -4,7 +4,7 @@ import axios from 'axios';
 const endpoints = [
   {
     name: 'Main API',
-    url: 'https://testwary.vercel.app/api/your-endpoint',
+    url: 'https://testwary.vercel.app/api/papkitsu',
   },
   {
     name: 'Docs',
