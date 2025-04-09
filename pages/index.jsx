@@ -4,21 +4,24 @@ import { useEffect, useState } from 'react'
 import InfoCards from '@/components/InfoCards.jsx'
 
 export default function Home() {
-  const [status, setStatus] = useState({ online: null, status: null });
+  const [endpoints, setEndpoints] = useState(null);
 
   useEffect(() => {
-    async function checkAPI() {
+    async function fetchStatus() {
       try {
         const res = await fetch("/api/status");
         const data = await res.json();
-        setStatus(data);
+        setEndpoints(data.endpoints);
       } catch {
-        setStatus({ online: false, status: "error" });
+        setEndpoints([]);
       }
     }
 
-    checkAPI();
+    fetchStatus();
   }, []);
+
+  const onlineEndpoints = endpoints?.filter((ep) => ep.online) || [];
+  const offlineEndpoints = endpoints?.filter((ep) => !ep.online) || [];
 
   return (
     <>
@@ -48,28 +51,37 @@ export default function Home() {
 
         {/* STATUS API */}
         <motion.div
-          className="text-center mt-4"
+          className="text-center mt-4 space-y-3"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          {status.online === null ? (
-            <span className="text-gray-400 text-sm">Memeriksa status API...</span>
+          {endpoints === null ? (
+            <span className="text-gray-400 text-sm">Memeriksa status endpoint...</span>
           ) : (
-            <span
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium ${
-                status.online
-                  ? "bg-green-900 text-green-300 border border-green-600"
-                  : "bg-red-900 text-red-300 border border-red-600"
-              }`}
-            >
-              <span
-                className={`w-2.5 h-2.5 rounded-full animate-pulse ${
-                  status.online ? "bg-green-400" : "bg-red-400"
-                }`}
-              ></span>
-              {status.online ? "API Status: Online" : "API Status: Offline"}
-            </span>
+            <>
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-green-900 text-green-300 border border-green-600">
+                <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+                {onlineEndpoints.length} Endpoint Online
+              </span>
+
+              {offlineEndpoints.length > 0 && (
+                <div className="space-y-1">
+                  <h3 className="text-red-300 font-semibold text-sm">Endpoint Offline:</h3>
+                  <ul className="space-y-1">
+                    {offlineEndpoints.map((ep) => (
+                      <li
+                        key={ep.path}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-900 text-red-300 border border-red-600 text-sm"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                        {ep.name} ({ep.status})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
           )}
         </motion.div>
 
