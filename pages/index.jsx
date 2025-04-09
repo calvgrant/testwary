@@ -46,7 +46,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          API publik gratis untuk berbagai kebutuhan aplikasi Anda. Cepat, handal, dan mudah digunakan.
+          API publik gratis yang dibuat dengan penuh semangat.
         </motion.p>
 
         {/* STATUS API */}

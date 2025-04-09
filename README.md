@@ -1,7 +1,8 @@
  ![twaryapi](https://raw.githubusercontent.com/calvgrant/testwary/refs/heads/main/styles/banner.png)
 
 # TwaryAPI (Next.js Edition)
- ![NextJS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white) ![JavaScript](https://shields.io/badge/JavaScript-F7DF1E?logo=JavaScript&logoColor=000&style=flat-square)
+ ![NextJS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+ ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
 TwaryAPI adalah REST API yang menyediakan berbagai data menarik seperti quote random, gombalan, gambar papkitsu, dan jokes receh. Sekarang hadir dengan tampilan keren menggunakan **Next.js**, **TailwindCSS**, dan animasi dari **Framer Motion**.
 
@@ -14,6 +15,7 @@ TwaryAPI adalah REST API yang menyediakan berbagai data menarik seperti quote ra
 - Dokumentasi API bawaan
 - Tester API interaktif
 - Deploy langsung ke Vercel
+- Endpoint Check (Check Endpoint Online Atau Tidak)
 
 ## API Endpoint
 Contoh endpoint:
