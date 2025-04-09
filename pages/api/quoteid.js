@@ -1,22 +1,17 @@
-import quotes from "@/data/quoteid.json"; // Pastikan file JSON berisi array objek dengan "author" dan "quotes"
+import quotes from "@/data/quoteid.json"; // sesuaikan path jika perlu
 
 export default function handler(req, res) {
   const count = parseInt(req.query.count) || 1;
 
-  const randomQuote = () => {
-    const item = quotes[Math.floor(Math.random() * quotes.length)];
-    return {
-      quotes: item.quotes,
-      author: item.author
-    };
-  };
+  const result = Array(count)
+    .fill(0)
+    .map(() => {
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      return {
+        author: randomQuote.author,
+        quotes: randomQuote.quotes,
+      };
+    });
 
-  const response = {
-    status: 200,
-    end_point: "/api/quoteid",
-    method: "GET",
-    data: count > 1 ? Array(count).fill(0).map(randomQuote) : randomQuote()
-  };
-
-  res.status(200).json(response);
+  res.status(200).json(count > 1 ? result : result[0]);
 }
