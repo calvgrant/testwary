@@ -6,8 +6,8 @@ export default function handler(req, res) {
   const randomQuote = () => {
     const item = quotes[Math.floor(Math.random() * quotes.length)];
     return {
-      author: item.author,
-      quotes: item.quotes
+      quotes: item.quotes,
+      author: item.author
     };
   };
 
