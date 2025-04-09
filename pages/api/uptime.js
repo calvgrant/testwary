@@ -8,20 +8,25 @@ export default async function handler(req, res) {
     const response = await fetch(targetUrl);
     const text = await response.text();
 
+    console.log("Status:", response.status);
+    console.log("Body:", text.slice(0, 200)); // Debug untuk tahu isi respons
+
     const isError =
-      !response.ok ||
       response.status >= 400 ||
       text.toLowerCase().includes("not found") ||
-      text.toLowerCase().includes("error");
+      text.toLowerCase().includes("error") ||
+      text.toLowerCase().includes("vercel") || // untuk 404 vercel
+      text.length < 20; // respons terlalu pendek bisa dicurigai
 
     if (isError) {
-      await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 100)}...`);
+      await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 80)}...`);
     }
 
     res.status(200).json({
       message: "Uptime checked",
       status: response.status,
       online: !isError,
+      debug: text.slice(0, 80),
     });
   } catch (error) {
     await sendDiscordAlert(`API is UNREACHABLE! Error: ${error.message}`);
