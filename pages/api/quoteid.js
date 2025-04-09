@@ -20,7 +20,7 @@ export default function handler(req, res) {
 
   const response = {
     status: 200,
-    end_point: "/fun/quoteid",
+    end_point: "/api/quoteid",
     method: "GET",
     data,
   };
