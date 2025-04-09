@@ -1,26 +1,48 @@
-import imgs from "@/data/papkitsu.json"; // adjust path as needed
+// pages/api/uptime.js
 
-export default function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Content-Type", "application/json");
+export default async function handler(req, res) {
+  const targetUrl = process.env.TARGET_API_URL2;
+  const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
 
-  const count = parseInt(req.query.count) || 1;
+  try {
+    const response = await fetch(targetUrl);
+    const text = await response.text();
 
-  const getRandomImage = () => ({
-    image_url: imgs[Math.floor(Math.random() * imgs.length)],
-  });
+    const isError =
+      !response.ok ||
+      response.status >= 400 ||
+      text.toLowerCase().includes("not found") ||
+      text.toLowerCase().includes("error");
 
-  const data = count > 1
-    ? Array(count).fill(0).map(getRandomImage)
-    : getRandomImage();
+    if (isError) {
+      await sendDiscordAlert(`API is DOWN! Status: ${response.status} - ${text.slice(0, 100)}...`);
+    }
 
-  const response = {
-    status: 200,
-    end_point: "/api/papkitsu",
-    method: "GET",
-    data,
-  };
+    res.status(200).json({
+      message: "Uptime checked",
+      status: response.status,
+      online: !isError,
+    });
+  } catch (error) {
+    await sendDiscordAlert(`API is UNREACHABLE! Error: ${error.message}`);
+    res.status(500).json({ message: "Check failed", error: error.message, online: false });
+  }
 
-  const prettyJson = JSON.stringify(response, null, 2);
-  res.status(200).end(prettyJson);
+  async function sendDiscordAlert(message) {
+    if (!discordWebhook) return;
+    await fetch(discordWebhook, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        embeds: [
+          {
+            title: "API Uptime Alert",
+            description: message,
+            color: 0xff0000,
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      }),
+    });
+  }
 }
