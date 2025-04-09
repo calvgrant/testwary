@@ -1,60 +1,66 @@
-// pages/uptime.js
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
-const apis = [
-  { name: 'TwaryAPI Main', url: 'https://twaryapi.vercel.app/api' },
-  // Tambah API lain di sini
+const endpoints = [
+  {
+    name: 'Main API',
+    url: 'https://testwary.vercel.app/api/your-endpoint',
+  },
+  {
+    name: 'Docs',
+    url: 'https://testwary.vercel.app/docs',
+  },
 ];
 
 export default function UptimePage() {
-  const [statuses, setStatuses] = useState({});
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const checkAPIs = async () => {
+  const checkStatus = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('/api/check', { apis });
-      setStatuses(res.data.statuses);
+      const res = await axios.post('/api/check', { endpoints });
+      setResults(res.data.statuses);
     } catch (err) {
-      console.error('Error checking APIs:', err);
+      console.error('Error checking status:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  useEffect(() => {
-    checkAPIs();
-  }, []);
-
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6">API Uptime Monitor</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 to-gray-900 text-white py-12 px-4">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold mb-6">TwaryAPI Uptime Checker</h1>
+        <button
+          onClick={checkStatus}
+          className="mb-8 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md font-medium transition"
+        >
+          {loading ? 'Checking...' : 'Ping Sekarang'}
+        </button>
 
-      <Button onClick={checkAPIs} disabled={loading}>
-        {loading ? 'Checking...' : 'Ping Sekarang'}
-      </Button>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-        {apis.map((api) => (
-          <Card key={api.url} className="rounded-xl border">
-            <CardContent className="p-4">
-              <h2 className="text-lg font-semibold">{api.name}</h2>
-              <p className="text-sm break-all text-muted-foreground">{api.url}</p>
-              <div className="mt-2">
-                <span
-                  className={`px-2 py-1 rounded text-white text-xs ${
-                    statuses[api.url] === 'Online' ? 'bg-green-500' : 'bg-red-500'
-                  }`}
-                >
-                  {statuses[api.url] || 'Unknown'}
-                </span>
+        <div className="space-y-4">
+          {results.map((res, idx) => (
+            <div
+              key={idx}
+              className={`p-4 rounded-lg border ${
+                res.online
+                  ? 'bg-green-900/50 border-green-500'
+                  : 'bg-red-900/50 border-red-500'
+              }`}
+            >
+              <div className="font-semibold text-lg">{res.name}</div>
+              <div className="text-sm break-all">{res.url}</div>
+              <div
+                className={`mt-1 text-sm font-bold ${
+                  res.online ? 'text-green-400' : 'text-red-400'
+                }`}
+              >
+                {res.online ? 'Online' : 'Offline'}
               </div>
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
