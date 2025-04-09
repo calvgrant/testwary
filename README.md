@@ -40,6 +40,7 @@ Project ini sudah support **serverless** dan siap langsung deploy ke [Vercel](ht
 
 ## Kontak
 Hubungi saya di:
+- [WhoisKalrex](https://whoiskalrex.zone.id)
 - [GitHub](https://github.com/calvgrant)
 - [Discord](https://discord.com/users/715783278237450280)
 
