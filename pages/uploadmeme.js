@@ -9,35 +9,47 @@ export default function UploadMeme() {
   const [status, setStatus] = useState('');
   const [showPreview, setShowPreview] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('Uploading...');
-
-    const res = await fetch('/api/upload-meme', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ url, caption, uploader }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      setStatus('Meme uploaded! ID: ' + data.id);
-      setUrl('');
-      setCaption('');
-      setUploader('');
-      setShowPreview(false);
-    } else {
-      setStatus('Error: ' + data.error);
-    }
-  };
+  const isImageUrl = (link) =>
+    /^https:\/\/.+\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(link);
 
   const handleUrlChange = (e) => {
     const value = e.target.value;
     setUrl(value);
-    // Tampilkan preview hanya jika URL tampak seperti gambar
-    setShowPreview(/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(value));
+    setShowPreview(isImageUrl(value));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isImageUrl(url)) {
+      setStatus('URL harus HTTPS dan berupa gambar (jpg/png/gif/webp)');
+      return;
+    }
+
+    setStatus('Mengupload meme...');
+
+    try {
+      const res = await fetch('/api/upload-meme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, caption, uploader }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStatus(`Meme berhasil diupload! ID: ${data.id}`);
+        setUrl('');
+        setCaption('');
+        setUploader('');
+        setShowPreview(false);
+      } else {
+        setStatus('Gagal upload: ' + data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus('Terjadi kesalahan saat menghubungi server.');
+    }
   };
 
   return (
@@ -65,7 +77,7 @@ export default function UploadMeme() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
-              placeholder="URL Gambar"
+              placeholder="URL Gambar (https://...)"
               value={url}
               onChange={handleUrlChange}
               className="w-full px-4 py-3 rounded-xl bg-gray-800 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"

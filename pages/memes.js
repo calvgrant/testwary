@@ -75,7 +75,7 @@ export default function MemesPage() {
 
           <div className="text-center mt-8">
             <a
-              href="/upload"
+              href="/uploadmeme"
               className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-purple-500 shadow-lg"
             >
               Upload Meme
