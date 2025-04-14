@@ -1,4 +1,5 @@
 import clientPromise from '@/lib/mongodb';
+import { motion } from 'framer-motion';
 
 export async function getServerSideProps() {
   const client = await clientPromise;
@@ -18,42 +19,39 @@ export async function getServerSideProps() {
 
 export default function MemesPage({ memes }) {
   return (
-    <div style={{
-      padding: '2rem',
-      fontFamily: 'sans-serif',
-      background: '#fafafa',
-      minHeight: '100vh'
-    }}>
-      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Meme Galeri Jomblo</h1>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '1.5rem'
-      }}>
+    <main className="min-h-screen bg-black text-white px-6 py-10">
+      <motion.h1
+        className="text-4xl md:text-5xl font-bold text-center text-pink-400 mb-10"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        Galeri Meme Jomblo
+      </motion.h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {memes.map((meme, i) => (
-          <div key={i} style={{
-            background: '#fff',
-            padding: '1rem',
-            borderRadius: '12px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-          }}>
+          <motion.div
+            key={i}
+            className="bg-gray-900 border border-gray-700 rounded-2xl p-4 shadow-md"
+            whileHover={{ scale: 1.03 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.03 }}
+          >
             <img
               src={meme.url}
               alt="meme"
-              style={{
-                width: '100%',
-                borderRadius: '8px',
-                marginBottom: '0.5rem'
-              }}
+              className="rounded-xl mb-3 w-full object-cover max-h-64"
             />
-            <p style={{ margin: 0 }}><strong>{meme.uploader}</strong></p>
-            <p style={{ margin: '0.25rem 0', fontSize: '0.9rem' }}>{meme.caption}</p>
-            <p style={{ fontSize: '0.75rem', color: '#666' }}>
+            <p className="text-sm text-pink-300 font-semibold">{meme.uploader}</p>
+            {meme.caption && <p className="text-sm text-gray-300">{meme.caption}</p>}
+            <p className="text-xs text-gray-500 mt-1">
               {new Date(meme.createdAt).toLocaleString()}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </main>
   );
 }
