@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 
@@ -9,47 +9,40 @@ export default function UploadMeme() {
   const [status, setStatus] = useState('');
   const [showPreview, setShowPreview] = useState(false);
 
-  const isImageUrl = (link) =>
-    /^https:\/\/.+\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(link);
+  // Load saved uploader from localStorage
+  useEffect(() => {
+    const savedUploader = localStorage.getItem('uploader');
+    if (savedUploader) {
+      setUploader(savedUploader);
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('Uploading...');
+
+    const res = await fetch('/api/upload-meme', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, caption, uploader }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      setStatus('Meme uploaded! ID: ' + data.id);
+      setUrl('');
+      setCaption('');
+      setShowPreview(false);
+      localStorage.setItem('uploader', uploader); // Save uploader to localStorage
+    } else {
+      setStatus('Error: ' + data.error);
+    }
+  };
 
   const handleUrlChange = (e) => {
     const value = e.target.value;
     setUrl(value);
-    setShowPreview(isImageUrl(value));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!isImageUrl(url)) {
-      setStatus('URL harus HTTPS dan berupa gambar (jpg/png/gif/webp)');
-      return;
-    }
-
-    setStatus('Mengupload meme...');
-
-    try {
-      const res = await fetch('/api/upload-meme', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, caption, uploader }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        setStatus(`Meme berhasil diupload! ID: ${data.id}`);
-        setUrl('');
-        setCaption('');
-        setUploader('');
-        setShowPreview(false);
-      } else {
-        setStatus('Gagal upload: ' + data.error);
-      }
-    } catch (err) {
-      console.error(err);
-      setStatus('Terjadi kesalahan saat menghubungi server.');
-    }
+    setShowPreview(/^https:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(value));
   };
 
   return (
