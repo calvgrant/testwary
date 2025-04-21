@@ -7,6 +7,8 @@ const endpoints = [
   { label: "GET /quoteid", path: "/api/quoteid" },
   { label: "GET /gombal", path: "/api/gombal" },
   { label: "GET /jokereceh", path: "/api/jokereceh" },
+  { label: "GET /dailyquote", path: "/api/dailyquote"},
+  { label: "GET /random-meme", path: "/api/random-meme"},
 ];
 
 export default function Tester() {
