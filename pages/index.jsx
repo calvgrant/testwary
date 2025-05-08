@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { motion } from 'framer-motion'
+import { FaShieldAlt, FaScroll, FaDiscord } from 'react-icons/fa'
 import { useEffect, useState } from 'react'
 import InfoCards from '@/components/InfoCards.jsx'
 
@@ -105,6 +106,40 @@ export default function Home() {
         </div>
 
         <InfoCards />
+
+        {/* FOOTER LINKS */}
+        <motion.div
+          className="mt-12 flex flex-col md:flex-row justify-center items-center gap-4 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <a
+            href="/privacy-policy"
+            className="inline-flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-sm font-medium px-4 py-2 rounded-xl transition-all duration-200"
+          >
+            <FaShieldAlt className="text-blue-400" />
+            Privacy Policy
+          </a>
+
+          <a
+            href="/terms-of-service"
+            className="inline-flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-sm font-medium px-4 py-2 rounded-xl transition-all duration-200"
+          >
+            <FaScroll className="text-purple-400" />
+            Terms of Service
+          </a>
+
+          <a
+            href="https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot+applications.commands&permissions=8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-xl transition-all duration-200 shadow-green-600 shadow-lg"
+          >
+            <FaDiscord />
+            Invite Danilxlo
+          </a>
+        </motion.div>
       </main>
     </>
   );
